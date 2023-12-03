@@ -1,17 +1,30 @@
 import 'package:english_words/english_words.dart';
 import 'package:flutter/material.dart';
-import 'package:namer_app/PrimaryButton.dart';
+import 'package:namer_app/primary_button.dart';
 import 'package:namer_app/dashboard_page.dart';
-import 'package:namer_app/start_to_count_page.dart';
+import 'package:namer_app/camera_page.dart';
 import 'package:namer_app/subscription_page.dart';
 import 'package:namer_app/settings_page.dart';
 import 'package:namer_app/contactus_page.dart';
 import 'package:provider/provider.dart';
 
-import 'stop_to_count_page copy.dart';
+import 'dart:async';
+import 'dart:io';
 
-void main() {
-  runApp(MyApp());
+import 'package:camera/camera.dart';
+
+Future<void> main() async {
+  // Ensure that plugin services are initialized so that `availableCameras()`
+  // can be called before `runApp()`
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // Obtain a list of the available cameras on the device.
+  final cameras = await availableCameras();
+
+  runApp(MyApp(
+      // Pass the appropriate camera to the CameraPage widget.
+
+      ));
 }
 
 class MyApp extends StatelessWidget {
@@ -40,35 +53,19 @@ class MyAppState extends ChangeNotifier {
 class MyHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    var appState = context.watch<MyAppState>();
-
     return Scaffold(
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                PrimaryButton(
-                    text: "Start to count",
-                    press: () {
-                      appState.current = WordPair.random();
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => StartToCountPage()));
-                    }),
-                PrimaryButton(
-                    text: "Stop to count",
-                    press: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => StopToCountPage()));
-                    }),
-              ],
-            ),
+            PrimaryButton(
+                text: "Camera",
+                height: 50,
+                width: 300,
+                press: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => CameraPage()));
+                }),
             PrimaryButton(
                 text: "Dashboard",
                 height: 150,
